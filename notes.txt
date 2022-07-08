@@ -1,0 +1,40 @@
+# checking pip version
+python -m pip --version
+
+# install venv 
+python -m pip install virtualenv
+
+# create a virtual env
+python -m venv venv
+
+#activate virtual env
+sourve venv/bin/activate
+
+#install flask 
+python -m pip install flask
+
+
+###########################
+##### GIT commands ########
+##########################
+
+# start project
+git init
+
+
+# set the remote url
+git remote add origin <url>
+
+
+
+# local copy
+git add .
+git commit -m "ANY MESSAGE"
+
+
+# upload to github
+# first time:
+git push -u origin master/main
+
+# next time
+git push

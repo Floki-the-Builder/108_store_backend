@@ -27,14 +27,14 @@ git remote add origin <url>
 
 
 
-# local copy
-git add .
-git commit -m "ANY MESSAGE"
-
-
 # upload to github
 # first time:
 git push -u origin master/main
+
+
+# local copy
+git add .
+git commit -m "ANY MESSAGE"
 
 # next time
 git push

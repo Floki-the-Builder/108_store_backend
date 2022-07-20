@@ -1,7 +1,9 @@
-from flask import Flask
+from unittest import result
+from flask import Flask, request
 from about import me
 from data import mock_data
 import json
+import random
 
 app = Flask('server')
 
@@ -23,7 +25,7 @@ def test():
 
 
 ####################################################################
-# API ENDOPOINTS =  PRODUCTS
+# API END-POINTS =  PRODUCTS
 ####################################################################
 
 
@@ -38,13 +40,31 @@ def about_json():
     # return f'{me[first]} {me[last]}'
     return json.dumps(me)  # parse dictionary into a json string
 
-#get /api/products
-# return mock_data a json string containing
-
 
 @app.get('/api/products')
 def get_products():
     return json.dumps(mock_data)
+
+# POST
+# communicate front with back end
+
+
+@app.post('/api/products')
+def save_product():
+    prod = request.get_json()
+
+    # add product to the mock_data with append
+    # assign ID to prod and generate random #
+    # return the product as json
+
+    mock_data.append(prod)
+    prod['id'] = random.randint(1, 888888888)
+    return json.dumps(prod)
+
+################
+#get /api/products
+# return mock_data a json string containing
+# GET
 
 
 @app.get('/api/products/<id>')
@@ -61,6 +81,7 @@ def get_id_by_product(id):
 # 1 - return OK
 # 2 - travel mock_data, and print the category of every product
 # 3 - pyt the category in a list and at the end of the for loop, return the list as jsonify
+
 
 @app.get('/api/categories')
 def get_categories():
@@ -102,6 +123,33 @@ def get_cheapest():
             cheapest = prod
 
     return json.dumps(cheapest)
+
+
+# get return the number of prod in the catalog
+#  api/count_products
+
+@app.get('/api/count_products')
+def get_prod_count():
+    count = len(mock_data)
+
+    return json.dumps({"count": count})
+
+
+# searches for products that contains the text you need EX: api/search/insert_text_to_find
+# get /api/search/<text>
+#  return all prods whose title contains text
+
+
+@app.get('/api/search/<text>')
+def search_prod(text):
+    result = []
+
+    text = text.lower()
+    for prod in mock_data:
+        if text in prod["title"].lower():
+            result.append(prod)
+
+    return json.dumps(result)
 
 
 ###########

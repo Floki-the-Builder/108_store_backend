@@ -7,12 +7,14 @@ python -m pip install virtualenv
 # create a virtual env
 python -m venv venv
 
-#activate virtual env
-sourve venv/bin/activate
-
 #install flask 
 python -m pip install flask
 
+#activate virtual env
+source venv/bin/activate
+
+#start 
+python3 server.python 
 
 ###########################
 ##### GIT commands ########

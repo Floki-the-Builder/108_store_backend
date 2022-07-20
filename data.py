@@ -6,6 +6,7 @@ mock_data = [
         'stock': 50,
         'title': 'shirt',
         'image': 'shirt.jpg',
+        'discoaut': 10,
         'category': 'apparel'
     },
     {
@@ -14,6 +15,7 @@ mock_data = [
         'stock': 50,
         'title': 'tank',
         'image': 'tank.jpg',
+        'discoaut': 10,
         'category': 'tank'
     },
     {
@@ -22,6 +24,7 @@ mock_data = [
         'stock': 50,
         'title': 'hoodie',
         'image': 'hoodie.jpg',
+        'discoaut': 10,
         'category': 'hoodie'
     },
     {
@@ -30,6 +33,7 @@ mock_data = [
         'stock': 50,
         'title': 'joggers',
         'image': 'joggers.jpg',
+        'discoaut': 10,
         'category': 'joggers'
     },
     {
@@ -38,6 +42,7 @@ mock_data = [
         'stock': 50,
         'title': 'shorts',
         'image': 'shorts.jpg',
+        'discoaut': 10,
         'category': 'shorts'
     },
     {
@@ -46,6 +51,7 @@ mock_data = [
         'stock': 50,
         'title': 'hat',
         'image': 'cap.jpg',
+        'discoaut': 10,
         'category': 'hat'
     },
 
@@ -55,6 +61,7 @@ mock_data = [
         'stock': 50,
         'title': 'skull cap',
         'image': 'skull_cap.jpg',
+        'discoaut': 10,
         'category': 'cap'
     }
 

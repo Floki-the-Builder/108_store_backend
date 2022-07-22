@@ -40,3 +40,10 @@ git commit -m "ANY MESSAGE"
 
 # next time
 git push
+
+####################
+intall mongo server 
+####################
+
+python -m pip install pymongo flask-pymongo "pymongo[srv]"
+python -m pip install certifi

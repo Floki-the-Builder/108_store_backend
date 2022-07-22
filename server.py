@@ -4,6 +4,8 @@ from about import me
 from data import mock_data
 import json
 import random
+from config import db  # db = data base
+from bson import ObjectId
 
 app = Flask('server')
 
@@ -41,9 +43,25 @@ def about_json():
     return json.dumps(me)  # parse dictionary into a json string
 
 
+########################
+# fix mongol _id
+
+def fix_mongo_id(obj):
+    onj['id'] = str(obj['_id'])
+    del obj['_id']
+    return obj
+#######################
+
+
 @app.get('/api/products')
 def get_products():
-    return json.dumps(mock_data)
+    cursor = db.prod.find({})
+    results = []
+    for prod in cursor:
+        fix_mongo_id(prod)
+        results.append(prod)
+
+    return json.dumps(results)
 
 # POST
 # communicate front with back end
@@ -53,43 +71,40 @@ def get_products():
 def save_product():
     prod = request.get_json()
 
-    # add product to the mock_data with append
-    # assign ID to prod and generate random #
-    # return the product as json
+    # save prod
+    db.products.insert_one(prod)
 
-    mock_data.append(prod)
-    prod['id'] = random.randint(1, 888888888)
+    #  fix the _id
+    prod["id"] = str(prod["_id"])
+    del prod["_id"]  # deletes under score from 'id
+
     return json.dumps(prod)
 
 ################
-#get /api/products
+# get /api/products
 # return mock_data a json string containing
 # GET
 
 
 @app.get('/api/products/<id>')
 def get_id_by_product(id):
-    for prod in mock_data:
-        if str(prod['id']) == id:
-            return json.dumps(prod)
+    prod = db.prod.find_one({"_id": ObjectId(id)})
+    if not prod:
+        return "NOT FOUND"
 
-    return 'NOT FOUND'
-
-
-#get  /api/categories/category
-# #return the list of categorizes
-# 1 - return OK
-# 2 - travel mock_data, and print the category of every product
-# 3 - pyt the category in a list and at the end of the for loop, return the list as jsonify
+    fix_mongo_id(prod)
+    return json.dumps(prod)
 
 
 @app.get('/api/categories')
 def get_categories():
+    cursor = db.prod.find({})
     categories = []
-    for product in mock_data:
+    for product in cursor:
         cat = product['category']
+
         if not cat in categories:   # this helps filter out dupplicates
-            categories.append(cat)
+            categories.append(categories)
 
     return json.dumps(categories)
 
@@ -103,41 +118,40 @@ def get_categories():
 
 @app.get('/api/products_category/<category>')
 def get_prod_cat(category):
-    print('your category: ', category)
+    cursor = db.prod.find({'category': category})
     results = []
-    category = category.lower()
-    for prod in mock_data:
-        if prod['category'].lower() == category:
-            results.append(prod)
+    for prod in cursor:
+        fix_mongo_id(prod)
+        results.append(prod)
 
     return json.dumps(results)
 ################
-#get /api/product_cheapest
+#  cursor = db.prod.find({})
+#     results = []
+#     for prod in cursor:
+#         fix_mongo_id(prod)
+#         results.append(prod)
 
 
 @app.get('/api/product_cheapest')
 def get_cheapest():
+    cursor = db.prod.find({})
     cheapest = mock_data[0]
-    for prod in mock_data:
+    for prod in cursor:
         if prod['price'] < cheapest['price']:
             cheapest = prod
-
+    fix_mongo_id(cheapest)
     return json.dumps(cheapest)
 
 
-# get return the number of prod in the catalog
-#  api/count_products
-
 @app.get('/api/count_products')
 def get_prod_count():
-    count = len(mock_data)
+    cursor = db.prod.find({})
+    count = 0
+    for prod in cursor:
+        count += 1
 
     return json.dumps({"count": count})
-
-
-# searches for products that contains the text you need EX: api/search/insert_text_to_find
-# get /api/search/<text>
-#  return all prods whose title contains text
 
 
 @app.get('/api/search/<text>')

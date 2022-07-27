@@ -6,9 +6,10 @@ import json
 import random
 from config import db  # db = data base
 from bson import ObjectId
+from flask_cors import CORS
 
 app = Flask('server')
-
+CORS(app)  # allow request from all origin
 # root
 
 
@@ -47,7 +48,7 @@ def about_json():
 # fix mongol _id
 
 def fix_mongo_id(obj):
-    onj['id'] = str(obj['_id'])
+    obj['id'] = str(obj['_id'])
     del obj['_id']
     return obj
 #######################
@@ -72,7 +73,7 @@ def save_product():
     prod = request.get_json()
 
     # save prod
-    db.products.insert_one(prod)
+    db.prod.insert_one(prod)
 
     #  fix the _id
     prod["id"] = str(prod["_id"])
@@ -100,8 +101,8 @@ def get_id_by_product(id):
 def get_categories():
     cursor = db.prod.find({})
     categories = []
-    for product in cursor:
-        cat = product['category']
+    for prod in cursor:
+        cat = prod['category']
 
         if not cat in categories:   # this helps filter out dupplicates
             categories.append(categories)
